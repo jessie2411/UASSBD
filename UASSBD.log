@@ -1,0 +1,66 @@
+MariaDB [(none)]> USE task_manager;
+Database changed
+MariaDB [task_manager]> SELECT 
+    -> 
+    -> a.id, a.task_name, b.task_status, b.task_comments, d.category_name as 'Category',
+    -> 
+    -> DATEDIFF(a.task_duration_end, a.ask_duration_start) as 'Lama Pengerjaan',
+    -> 
+    -> c.name as 'Create By', (SELECT name from users where users.id = b.user_verify_id ) as 'Verified By'
+    -> 
+    -> FROM task_plans a
+    -> 
+    -> RIGHT JOIN task_dailies b ON a.id = b.plan_id
+    -> 
+    -> INNER JOIN users c ON b.user_id = c.id
+    -> 
+    -> RIGHT JOIN task_categories d ON a.category_id = d.id;
++------+-----------+-------------+---------------+--------------+-----------------+-----------+-------------+
+| id   | task_name | task_status | task_comments | Category     | Lama Pengerjaan | Create By | Verified By |
++------+-----------+-------------+---------------+--------------+-----------------+-----------+-------------+
+| NULL | NULL      | NULL        | NULL          | Analisis     |            NULL | NULL      | NULL        |
+| NULL | NULL      | NULL        | NULL          | Administrasi |            NULL | NULL      | NULL        |
+| NULL | NULL      | NULL        | NULL          | Teknikal     |            NULL | NULL      | NULL        |
++------+-----------+-------------+---------------+--------------+-----------------+-----------+-------------+
+3 rows in set (0.022 sec)
+
+MariaDB [task_manager]> CREATE VIEW nim_211402116 AS
+    -> 
+    -> SELECT a.id as 'Task Id', a.task_name as 'Nama Task', a.task_status as 'Status', a.category_id as 'Kategori Indikator', b.category_name as 'Kategori', c.indicator_name as 'Indikator', a.user_create as 'Creator Id', d.name as 'Creator Name', a.task_priority as 'Prioritas'
+    -> 
+    -> FROM task_plans a
+    -> 
+    -> RIGHT JOIN task_categories b
+    -> 
+    -> ON a.category_id = b.id
+    -> 
+    -> RIGHT JOIN task_indicators c
+    -> 
+    -> ON a.category_id = c.id
+    -> 
+    -> RIGHT JOIN users d
+    -> 
+    -> ON a.user_create = d.id;
+Query OK, 0 rows affected (0.024 sec)
+
+MariaDB [task_manager]> SHOW DATABASE;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DATABASE' at line 1
+MariaDB [task_manager]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| lab_pwl            |
+| laravel            |
+| mysql              |
+| newsportal         |
+| performance_schema |
+| phpmyadmin         |
+| task_manager       |
+| test               |
+| tubespwl           |
+| tubessbd           |
+| website_laravel    |
++--------------------+
+12 rows in set (0.004 sec)
+
